@@ -1,60 +1,41 @@
-import db from "../database/models";
-import config from "../database/config/auth.config";
-const Users = db.users;
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import Response from '../helpers/response';
+import Password from '../helpers/password';
+import Token from '../helpers/token';
+import Userservices from '../database/services/userservice';
 
-exports.signup = (req, res) => {
-    console.log(req.body);
-    Users.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
-    }).then(user => {
-        res.status(201).send({
-            id: user.id,
-            email: user.email,
-            username: user.username,
-            accessToken: jwt.sign({id:user.id}, config.secret, {expiresIn: 86400 })
-            });
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message
-        });
-    });
-};
+class authControll{
+static async signup(req, res){
+    try{
+    const hashPassword = Password.hashPassword(req.body.password); 
+    const {username, email} = req.body;
+    const userData = { username,email,password:hashPassword};
+    const user = await Userservices.createUser(userData);
+    const token = Token.generateToken(user.user_id) 
+     return Response.handleSuccess(201,{user,token},'Successful registered',res);
+    }catch (err){
+        return Response.handleError(500,err.message,res);
+        }
+}
 
+static async signin(req,res){
+    const {username, password} = req.body;
+    try{
+    const user = await Userservices.findUsername({username});
+    console.log(user);
+  if(!user||  !Password.comparePass(
+        password,
+        user.password
+    )){
+        Response.handleError(404,"Incorrect credentials",res);
+    }
+   const token = Token.generateToken(user.user_id) 
+    return Response.handleSuccess(200,'Successful loggedIn',{username: user.username,token},res);
+}  catch (err) {
+    Response.handleError(500,err.message,res);
+   throw err;
+}
+}
 
-exports.signin = (req, res) => {
-    Users.findOne({
-        where :{
-            username: req.body.username
-        }
-    }).then(user => {
-        if(!user){
-          return res.status(404).send({
-                message: "user Not Found"
-            });
-        }
-        let passwordIsValid = bcrypt.compareSync(
-            req.body.password,
-            user.password
-        );
-        if(!passwordIsValid) {
-          return res.status(401).send({
-                accessToken: null,
-                message: "Invalid Password!"
-            });
-        }
-        let token = jwt.sign({id:user.id}, config.secret, {expiresIn: 86400 });   
-        res.status(200).send({
-            id: user.id,
-            username: user.username,
-            accessToken: token
-        });
-    }).catch(err=> {
-        res.status(500).send({
-            message: err.message
-        });
-    });
-};
+}
+export default  authControll;
+

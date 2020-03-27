@@ -3,21 +3,21 @@ import express from "express";
 import * as bodyParser from "body-parser";
 import cors from "cors";
 
+
+//import {} from 'dotenv/config';
+require('dotenv').config({ path: ".env" });
 const app = express();
+const PORT = process.env.PORT || 8080;
+const db = require("./database/models");
+//require("./routes/auth.routes")(app);
 const corsOptions = {
 origin : 'https://localhost:8081'
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-const db = require("../src/database/models");
 db.sequelize.sync();
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to level-up application." });
-});
-require("../src/routes/auth.routes")(app);
-const PORT = process.env.PORT || 8080;
+app.use(require("../src/routes/auth.routes"));
 app.listen(PORT, () => {
-  console.log("server is running");
+  console.log(`server is running ${PORT}`);
 });

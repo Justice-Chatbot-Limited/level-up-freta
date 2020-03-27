@@ -4,7 +4,7 @@
   "description": "In this project, you are part of a team building a blog platform. One requirement is for a REST API service to provide posts information using the Nodejs Express framework. The requirements include authenticating, filtering and ordering requirements, response codes and error messages for the queries you must implement.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node lib/index.js",
+    "start": "babel-watch src/app.js",
     "build": "babel lib -d dist",
     "serve": "node dist/index.js",
     "test": "mocha --require @babel/register"
@@ -23,26 +23,32 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
     "@babel/node": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",
     "babel-watch": "^7.0.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
     "mocha": "^7.1.0",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.2",
-    "rimraf": "^3.0.2",
-    "sequelize": "^5.21.5"
+    "prettier": "^2.0.1",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "node-latest-version": "^1.0.16"
+    "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "node-latest-version": "^1.0.16",
+    "sequelize": "^5.21.5",
+    "sequelize-cli": "^5.5.1"
   }
 }

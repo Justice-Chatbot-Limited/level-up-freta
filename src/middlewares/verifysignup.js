@@ -1,31 +1,12 @@
-import db from "../database/models";
-const Users = db.users;
-module.exports.checkDuplicate = (req, res, next) => {
-    console.log(req.body);
-    Users.findOne({
-        where: {username: req.body.username
-        }
-    }).then(user => {
-        if (user) {
-            res.status(400).send({
-                message: "Username already in use!"
-            });
-            return;
-        }
-
-        // Email
-        Users.findOne({
-            where:{
-                email: req.body.email
-            }
-        }).then(user => {
-            if(user) {
-                res.status(400).send({
-                    message: "Email is already in use!"
-                });
-                return;
-            }
-           next();
-        });
-    });
+import Userservices from '../database/services/userservice';
+import Response from '../helpers/response';
+const checkUsername = async (req, res, next) => {
+    const {username} = req.body;
+    const usernameExist = await Userservices.findUsername({username});
+    if (usernameExist){
+        return Response.handleError(400,"Username already in use!",res);
+    }
+    next();
 };
+
+export default checkUsername;
