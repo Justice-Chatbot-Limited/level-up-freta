@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 db.sequelize.sync();
 app.use(require("../src/routes/auth.routes"));
+app.use(require("../src/routes/user.routes"))
 app.listen(PORT, () => {
   console.log(`server is running ${PORT}`);
 });

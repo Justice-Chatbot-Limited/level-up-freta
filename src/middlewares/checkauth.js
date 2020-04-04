@@ -1,28 +1,18 @@
-/*import jwt from "jsonwebtoken";
-// import db from "../database/models";
-// const Users = db.users;
-class Jwtservices {
-     token = authHeader.split(' ')[1];
-verifyToken (data) {
-    if(typeof data !== 'undefined'){
-           try{
-            jwt.verify(token, 'process.env.JWT_SECRET_KEY', (err, decode) => {
-                return decode.id;
-                });
-            } catch (err) { return res.status(401).send({
-            message: "Unauthorize!"
-        }); 
-    }
-   }
-}
-generateToken(config){
-    jwt.sign(config,'process.env.JWT_SECRET_KEY',{expiresIn: 86400},(err,token)=>{
-        if(err){
-            console.log(err);
-        }
-        return token;
-        });
+import Token from "../helpers/token";
+import Responses from "../helpers/response";
+const checkAuth = async (req,res, next) => {  
+    const authHeader = req.headers["authorization"];
+    if(typeof authHeader !== 'undefined'){
+        const data = Token.verifyToken(authHeader);
+         if(!data){
+              return Responses.handleError(400,"Unauthorized! user", res);
+                   
+         }
+            req.user = data;
+            next(); 
+            }else{
+                return Responses.handleError(403,"Header is undefined",res);
+            }
 }
 
-}
-exports.default = Jwtservices;*/
+export default checkAuth;

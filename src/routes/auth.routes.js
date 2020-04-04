@@ -11,6 +11,5 @@ const router = express.Router();
     });
   
     router.post("/auth/signup",checkUsername, controller.signup);
-    
     router.post("/auth/signin", controller.signin);
 module.exports = router;

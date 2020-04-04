@@ -30,5 +30,7 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.users = require("../models/user.model")(sequelize, Sequelize);
+db.users = require("./user.model")(sequelize, Sequelize);
+db.posts = require("./post.model")(sequelize, Sequelize);
 module.exports = db;
+db.users.hasOne(db.posts,{ foreignKey : 'user_id'});

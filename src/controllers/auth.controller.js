@@ -10,8 +10,9 @@ static async signup(req, res){
     const {username, email} = req.body;
     const userData = { username,email,password:hashPassword};
     const user = await Userservices.createUser(userData);
-    const token = Token.generateToken(user.user_id) 
-     return Response.handleSuccess(201,{user,token},'Successful registered',res);
+    const token = Token.generateToken(user.user_id);
+    const {user_id} = user.dataValues;
+        return Response.handleSuccess(201,'Successful registered',{user_id,username,email,token},res);
     }catch (err){
         return Response.handleError(500,err.message,res);
         }
