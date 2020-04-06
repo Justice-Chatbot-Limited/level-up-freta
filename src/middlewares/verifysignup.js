@@ -8,5 +8,4 @@ const checkUsername = async (req, res, next) => {
     }
     next();
 };
-
 export default checkUsername;

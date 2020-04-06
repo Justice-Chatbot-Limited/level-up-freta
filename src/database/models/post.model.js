@@ -1,34 +1,34 @@
 module.exports = (sequelize, Sequelize) => {
     const Posts = sequelize.define("posts", {
-        post_id :{
+        post_id: {
             type: Sequelize.BIGINT(20),
-            primaryKey : true,
-            allowNull : false,
-            autoIncrement : true
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement: true
         },
-        poster : {
+        poster: {
             type: Sequelize.STRING,
-            allowNull : false
-        },
-        title :{
-            type: Sequelize.STRING,
-            unique : true,
             allowNull: false
         },
-       description : {
+        title: {
             type: Sequelize.STRING,
-            allowNull:false
-           },
-           createdAt: {
+            unique: true,
+            allowNull: false
+        },
+        description: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        createdAt: {
             type: Sequelize.DATE,
             allowNull: false,
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
-           },
-           updatedAt: {
+        },
+        updatedAt: {
             type: Sequelize.DATE,
             allowNull: false,
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
-           }
+        }
 
     });
     return Posts;
